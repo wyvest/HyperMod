@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wyvtils",
+  "name": "Wyvtilities",
+  "description": "lol",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Wyvest"],
+  "credits": "Sk1er LLC for ModCore",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
