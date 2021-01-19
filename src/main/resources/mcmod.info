@@ -2,13 +2,13 @@
 {
   "modid": "wyvtils",
   "name": "Wyvtilities",
-  "description": "lol",
+  "description": "A utility mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authorList": ["Wyvest"],
-  "credits": "Sk1er LLC for ModCore",
+  "credits": "TGMMatthew for HUD, and Hytilities for some code.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
