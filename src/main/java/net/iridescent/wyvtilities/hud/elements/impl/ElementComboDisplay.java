@@ -44,7 +44,7 @@ public class ElementComboDisplay extends Elements {
         if (System.currentTimeMillis() - lastHit > 3000)
             combo = 0;
         this.setRenderedValue(combo == 0 ? "none" : combo + " Combo");
-        this.height = 10 * this.getPosition().getScale();
+        this.height = (int) (10 * this.getPosition().getScale());
         super.onRendered(position);
     }
 

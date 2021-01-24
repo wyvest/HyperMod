@@ -1,5 +1,6 @@
 package net.iridescent.wyvtilities.commands;
 
+//unlike normal Wyvtilities this uses vigilance instead of TGMLib which is why it looks a bit different
 
 import net.iridescent.wyvtilities.Wyvtilities;
 import club.sk1er.mods.core.ModCore;

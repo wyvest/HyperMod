@@ -37,9 +37,5 @@ public class PlayerListener {
         }
     }
 
-    @SubscribeEvent
-    protected void onKeyPressed(InputEvent.KeyInputEvent event) {
-        if (Wyvtilities.getInstance().openGuiKeyBinding.isPressed()) Minecraft.getMinecraft().displayGuiScreen(Wyvtilities.getInstance().configGui);
-    }
 
 }

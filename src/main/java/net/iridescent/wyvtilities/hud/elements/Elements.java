@@ -1,7 +1,7 @@
 package net.iridescent.wyvtilities.hud.elements;
 
-import net.iridescent.wyvtilities.GUI.GUIConfiguration;
 import net.iridescent.wyvtilities.GUI.GUIElement;
+import net.iridescent.wyvtilities.others.ColourUtils;
 import net.iridescent.wyvtilities.others.References;
 import net.iridescent.wyvtilities.Wyvtilities;
 import net.iridescent.wyvtilities.files.FileHandler;
@@ -26,10 +26,12 @@ public class Elements {
     private boolean textShadow;
     protected boolean background;
     public ElementColour backgroundColor;
+    private boolean showPrefix;
+    private boolean chroma;
 
     //INDIVIDUAL ELEMENT VARIABLES
     public String prefix;
-    public GUIElement elementScreen = new GUIElement(new GUIConfiguration(Wyvtilities.getInstance().configGui), this){};
+    public GUIElement elementScreen;
 
     //REQUIRED FOR DRAGGABLE HUD
     public int width, height;
@@ -65,6 +67,8 @@ public class Elements {
                     Integer.parseInt(String.valueOf(colourObj.get("a")))
             );
         }
+        if(isConfigFileNull) this.chroma = true;
+        else this.chroma = (boolean) handler.load(name, handler.elementDir).get("chroma");
 
         if (this.position == null) this.position = new ElementPosition(
                 isConfigFileNull ?
@@ -75,7 +79,7 @@ public class Elements {
                         Integer.parseInt(String.valueOf(((JSONObject) handler.load(this.name, Wyvtilities.getFileHandler().elementDir).get("position")).get("y"))),
                 isConfigFileNull ?
                         1 :
-                        Integer.parseInt(String.valueOf(((JSONObject) handler.load(this.name, Wyvtilities.getFileHandler().elementDir).get("position")).get("scale"))));
+                        Math.round(Float.parseFloat(String.valueOf(((JSONObject) handler.load(this.name, Wyvtilities.getFileHandler().elementDir).get("position")).get("scale")))));
 
         try {
             if (this.colour == null && isConfigFileNull) this.colour = new ElementColour(255, 255, 255);
@@ -90,6 +94,9 @@ public class Elements {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(isConfigFileNull) this.showPrefix = true;
+        else this.showPrefix = (boolean) handler.load(name, handler.elementDir).get("show_prefix");
+
 
         this.setup();
     }
@@ -118,7 +125,7 @@ public class Elements {
     public String getRenderedString() {
         String value = new String();
         if (this.shouldRenderBrackets()) value += "[";
-        if (this.prefix != null)
+        if (this.prefix != null && this.showPrefix)
             value += this.prefix + ": ";
         value += this.getRenderedValue();
         if (this.shouldRenderBrackets()) value += "]";
@@ -130,8 +137,8 @@ public class Elements {
             Gui.drawRect(position.getX() - 2, position.getY() - 2, position.getX() + this.width, position.getY() + this.height, this.backgroundColor.getRGBA());
         GlStateManager.pushMatrix();
         GlStateManager.scale(this.getPosition().getScale(), this.getPosition().getScale(), 1);
-        this.mc.fontRendererObj.drawString(this.getRenderedString(), position.getX() / position.getScale(), position.getY() / position.getScale(), this.colour.getRGB(), this.getTextShadow());
-        this.width = (int) (this.mc.fontRendererObj.getStringWidth(this.getRenderedString()) * this.getPosition().getScale());
+        this.mc.fontRendererObj.drawString(this.getRenderedString(), position.getX() / position.getScale(), position.getY() / position.getScale(), this.chroma ? ColourUtils.getInstance().getChroma() : this.colour.getRGB(), this.getTextShadow());
+        this.width = Math.round(this.mc.fontRendererObj.getStringWidth(this.getRenderedString()) * this.getPosition().getScale());
         GlStateManager.popMatrix();
     }
 
@@ -158,6 +165,8 @@ public class Elements {
         backgroundColourObj.put("a", this.backgroundColor.getA());
         backgroundObj.put("colour", backgroundColourObj);
         obj.put("background", backgroundObj);
+        obj.put("show_prefix", this.showPrefix);
+        obj.put("chroma", chroma);
         Wyvtilities.getFileHandler().save(this.getName(), Wyvtilities.getFileHandler().elementDir, obj);
     }
 
@@ -183,6 +192,8 @@ public class Elements {
                 Integer.parseInt(String.valueOf(backgroundColourObj.get("b"))),
                 Integer.parseInt(String.valueOf(backgroundColourObj.get("a")))
         );
+        this.showPrefix = (boolean) obj.get("show_prefix");
+        this.chroma = (boolean) obj.get("chroma");
     }
 
     public String getName() {
@@ -213,6 +224,15 @@ public class Elements {
         return background;
     }
 
+    public boolean shouldShowPrefix() {
+        return showPrefix;
+    }
+
+    public boolean isChroma() {
+        return chroma;
+    }
+
+
     protected void setRenderedValue(String renderedValue) {
         this.renderedValue = renderedValue;
     }
@@ -232,4 +252,13 @@ public class Elements {
     public void setBackgroundToggle(boolean background) {
         this.background = background;
     }
+
+    public void setShowPrefix(boolean showPrefix) {
+        this.showPrefix = showPrefix;
+    }
+
+    public void setChroma(boolean chroma) {
+        this.chroma = chroma;
+    }
+
 }

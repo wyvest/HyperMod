@@ -1,11 +1,11 @@
 package net.iridescent.wyvtilities.GUI;
 
-import ga.matthewtgm.lib.gui.GuiTransButton;
 import ga.matthewtgm.lib.util.RenderUtils;
 import net.iridescent.wyvtilities.others.References;
 import net.iridescent.wyvtilities.Wyvtilities;
 import net.iridescent.wyvtilities.hud.elements.Elements;
 import net.iridescent.wyvtilities.hud.elements.ElementPosition;
+import ga.matthewtgm.lib.gui.GuiTransButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -19,14 +19,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.function.Predicate;
-public class GUIConfiguration extends GuiScreen{
+
+public class GUIConfiguration extends GuiScreen {
 
     private GuiScreen parent;
 
     private final Logger logger = LogManager.getLogger(References.NAME + " (" + this.getClass().getSimpleName() + ")");
 
     private boolean dragging;
-    private Optional<Elements> selected = Optional.empty();
+    private Optional<Elements> selectedElement = Optional.empty();
 
     private GuiButton selectedButton;
 
@@ -35,7 +36,7 @@ public class GUIConfiguration extends GuiScreen{
     private List<GuiButton> buttons;
     private void setButtons() {
         this.buttons = Arrays.asList(
-                new GuiTransButton(0, this.width / 2 - 50, this.height - 20, 100, 20, this.parent == null ? "Close" : "Back")
+                new GuiTransButton(0, this.width / 2 - 50, this.height - 20, 100, 20, this.parent == null ? "Save and close" : "Save and go back")
         );
         this.setupElementButtons("init", null);
     }
@@ -85,14 +86,14 @@ public class GUIConfiguration extends GuiScreen{
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.prevX = mouseX;
         this.prevY = mouseY;
-        this.selected = Wyvtilities.getInstance().getElementManager().getElements().stream().filter(new MouseHoveringElement(mouseX, mouseY)).findFirst();
+        this.selectedElement = Wyvtilities.getInstance().getElementManager().getElements().stream().filter(new MouseHoveringElement(mouseX, mouseY)).findFirst();
 
-        if(selected.isPresent()) {
+        if(selectedElement.isPresent()) {
+            if(!selectedElement.get().isToggled()) return;
             this.dragging = true;
         }
 
-        if (mouseButton == 0 && !this.selected.isPresent())
-        {
+        if (mouseButton == 0 && !this.selectedElement.isPresent()) {
             for (int i = 0; i < this.buttonList.size(); ++i)
             {
                 GuiButton guibutton = this.buttonList.get(i);
@@ -120,9 +121,9 @@ public class GUIConfiguration extends GuiScreen{
     }
 
     protected void updateElementPosition(int x, int y) {
-        if(selected.isPresent() && this.dragging) {
-            Elements elements = selected.get();
-            ElementPosition position = elements.getPosition();
+        if(selectedElement.isPresent() && this.dragging) {
+            Elements element = selectedElement.get();
+            ElementPosition position = element.getPosition();
             position.setPosition(position.getX() + x - this.prevX, position.getY() + y - this.prevY);
         }
         this.prevX = x;
@@ -135,20 +136,19 @@ public class GUIConfiguration extends GuiScreen{
     }
 
     private void setupElementButtons(String type, GuiButton button) {
-        int offset = 20;
-        int offsetX = 0;
-        for(Elements elements : Wyvtilities.getInstance().getElementManager().getElements()) {
+        int offset = this.height / 2 - 50;
+        int offsetX = this.width / 2 - 105;
+        for(Elements element : Wyvtilities.getInstance().getElementManager().getElements()) {
             if(type.equalsIgnoreCase("init")) {
-                this.buttonList.add(new GuiTransButton(Wyvtilities.getInstance().getElementManager().getElements().indexOf(elements) + 1, offsetX, this.height - offset, 100, 20, elements.getName()));
-                offset = offset + 20;
-                if(offset > 240) {
-                    offsetX = this.width - 100;
-                    offset = 20;
+                this.buttonList.add(new GuiTransButton(Wyvtilities.getInstance().getElementManager().getElements().indexOf(element) + 1, offsetX, this.height - offset, 100, 20, element.getName()));
+                offset += 20;
+                if(offset > ((this.height / 2) / Wyvtilities.getInstance().getElementManager().getElements().size() * 20)) {
+                    offsetX = this.width / 2 + 5;
+                    offset = this.height / 2 - 50;
                 }
-                if(offset > Wyvtilities.getInstance().getElementManager().getElements().size() * 20) offset = 20;
             } else if(type.equalsIgnoreCase("action")) {
-                if(button.id == Wyvtilities.getInstance().getElementManager().getElements().indexOf(elements) + 1) {
-                    Minecraft.getMinecraft().displayGuiScreen(elements.elementScreen);
+                if(button.id == Wyvtilities.getInstance().getElementManager().getElements().indexOf(element) + 1) {
+                    Minecraft.getMinecraft().displayGuiScreen(element.elementScreen);
                 }
             }
         }
@@ -165,13 +165,13 @@ public class GUIConfiguration extends GuiScreen{
 
 
         @Override
-        public boolean test(Elements elements) {
-            ElementPosition position = elements.getPosition();
+        public boolean test(Elements element) {
+            ElementPosition position = element.getPosition();
             int posX = position.x;
             int posY = position.y;
-            if(x >= posX && x <= posX + elements.width) {
-                if(y >= posY && y <= posY + elements.height) {
-                    return true;
+            if(x >= posX && x <= posX + element.width) {
+                if(y >= posY && y <= posY + element.height) {
+                    return element.isToggled();
                 }
             }
             return false;

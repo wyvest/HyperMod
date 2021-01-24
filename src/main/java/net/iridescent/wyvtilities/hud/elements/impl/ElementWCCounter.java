@@ -16,7 +16,7 @@ public class ElementWCCounter extends Elements{
     @Override
     public void onRendered(ElementPosition position) {
         this.setRenderedValue(wcCounter + " WCs");
-        this.height = 10 * this.getPosition().getScale();
+        this.height = (int) (10 * this.getPosition().getScale());
         super.onRendered(position);
     }
 }

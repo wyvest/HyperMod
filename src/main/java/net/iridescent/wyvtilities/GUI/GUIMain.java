@@ -23,8 +23,10 @@ public class GUIMain extends GuiScreen {
         this.buttonList.add(new GuiTransButton(0, this.width / 2 - 50, this.height - 20, 100, 20, "Close"));
         this.buttonList.add(new GuiTransButton(1, this.width - 80, 0, 80, 20, "HUD Editor"));
         this.buttonList.add(new GuiTransButton(2, this.width / 2 - 50, this.height / 2 - 60, 100, 20, "Toggle: " + (Wyvtilities.getInstance().isToggled() ? EnumChatFormatting.GREEN + "ON" : EnumChatFormatting.RED + "OFF")));
-        this.buttonList.add(new GuiTransButton(3, this.width / 2 - 50, this.height / 2 - 40, 100, 20, "Credits"));
-        this.buttonList.add(new GuiTransButton(4, this.width / 2 - 50, this.height / 2 - 20, 100, 20, "Pause button: " + (GUIListener.getInstance().mustAddPauseButton() ? EnumChatFormatting.GREEN + "ON" : EnumChatFormatting.RED + "OFF")));
+        this.buttonList.add(new GuiTransButton(3, this.width / 2 - 50, this.height / 2, 100, 20, "Credits"));
+        this.buttonList.add(new GuiTransButton(4, this.width / 2 - 50, this.height / 2 - 40, 100, 20, "Pause button: " + (GUIListener.getInstance().mustAddPauseButton() ? EnumChatFormatting.GREEN + "ON" : EnumChatFormatting.RED + "OFF")));
+        this.buttonList.add(new GuiTransButton(5, this.width / 2 - 50, this.height / 2 - 20, 100, 20, "Show in chat: " + (Wyvtilities.getInstance().getElementManager().isShowInChat() ? EnumChatFormatting.GREEN + "ON" : EnumChatFormatting.RED + "OFF")));
+        this.buttonList.add(new GuiTransButton(5, this.width / 2 - 50, this.height / 2, 100, 20, "Show in chat: " + (Wyvtilities.getInstance().getElementManager().isShowInChat() ? EnumChatFormatting.GREEN + "ON" : EnumChatFormatting.RED + "OFF")));
         super.initGui();
     }
 
@@ -43,6 +45,7 @@ public class GUIMain extends GuiScreen {
 
                 mainConfigObj.put("full_toggle", Wyvtilities.getInstance().isToggled());
                 mainConfigObj.put("pause_button", GUIListener.getInstance().mustAddPauseButton());
+                mainConfigObj.put("show_in_chat", Wyvtilities.getInstance().getElementManager().isShowInChat());
                 Wyvtilities.getFileHandler().save("main", Wyvtilities.getFileHandler().modDir, mainConfigObj);
 
                 Minecraft.getMinecraft().displayGuiScreen(this);
@@ -55,6 +58,17 @@ public class GUIMain extends GuiScreen {
 
                 mainConfigObj.put("full_toggle", Wyvtilities.getInstance().isToggled());
                 mainConfigObj.put("pause_button", GUIListener.getInstance().mustAddPauseButton());
+                mainConfigObj.put("show_in_chat", Wyvtilities.getInstance().getElementManager().isShowInChat());
+                Wyvtilities.getFileHandler().save("main", Wyvtilities.getFileHandler().modDir, mainConfigObj);
+
+                Minecraft.getMinecraft().displayGuiScreen(this);
+                break;
+            case 5:
+                Wyvtilities.getInstance().getElementManager().setShowInChat(!Wyvtilities.getInstance().getElementManager().isShowInChat());
+
+                mainConfigObj.put("full_toggle", Wyvtilities.getInstance().isToggled());
+                mainConfigObj.put("pause_button", GUIListener.getInstance().mustAddPauseButton());
+                mainConfigObj.put("show_in_chat", Wyvtilities.getInstance().getElementManager().isShowInChat());
                 Wyvtilities.getFileHandler().save("main", Wyvtilities.getFileHandler().modDir, mainConfigObj);
 
                 Minecraft.getMinecraft().displayGuiScreen(this);
