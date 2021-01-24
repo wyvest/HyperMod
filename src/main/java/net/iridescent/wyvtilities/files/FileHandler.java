@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FileHandler {
 
-    public File wyvestModDir = new File(Minecraft.getMinecraft().mcDataDir.getPath() + "/config", "Wyvest's Mods");
+    public File wyvestModDir = new File(Minecraft.getMinecraft().mcDataDir.getPath() + "/config", "wyvest");
     public File modDir = new File(wyvestModDir, References.NAME);
     public File elementDir = new File(modDir, "HUD Elements");
     public File otherDir = new File(modDir, "Other");

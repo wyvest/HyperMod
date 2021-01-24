@@ -5,8 +5,6 @@ import net.iridescent.wyvtilities.Wyvtilities;
 import net.minecraft.client.gui.GuiChat;
 import net.iridescent.wyvtilities.hud.elements.impl.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,13 +16,6 @@ public class ElementManager {
 
     private final List<Elements> elements = new ArrayList<>();
 
-    private boolean showInChat;
-    public boolean isShowInChat() {
-        return showInChat;
-    }
-    public void setShowInChat(boolean showInChat) {
-        this.showInChat = showInChat;
-    }
 
 
     public void init() {
@@ -42,18 +33,12 @@ public class ElementManager {
 
     @SubscribeEvent
     protected void onGameOverlayRendered(RenderGameOverlayEvent.Post event) {
-        if(event.type == RenderGameOverlayEvent.ElementType.ALL) {
-            for (Elements elements : this.getElements()) {
-                if (Wyvtilities.getInstance().isToggled() && (Minecraft.getMinecraft().currentScreen == null || this.showInChat()) && elements.isToggled() && Minecraft.getMinecraft().thePlayer != null)
-                    elements.onRendered(elements.getPosition());
+        if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
+            for (Elements element : this.getElements()) {
+                if (Wyvtilities.getInstance().isToggled() && Minecraft.getMinecraft().currentScreen == null && element.isToggled() && Minecraft.getMinecraft().thePlayer != null)
+                    element.onRendered(element.getPosition());
             }
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.icons);
         }
-    }
-
-    private boolean showInChat() {
-        return (this.isShowInChat() && Minecraft.getMinecraft().currentScreen instanceof GuiChat);
     }
 
 

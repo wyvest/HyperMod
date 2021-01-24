@@ -73,13 +73,11 @@ public class Wyvtilities {
         boolean isConfigFileNull = Wyvtilities.getFileHandler().load("main", Wyvtilities.getFileHandler().modDir) == null;
         if (!isConfigFileNull) {
             this.toggled = (boolean) getFileHandler().load("main", getFileHandler().modDir).get("full_toggle");
-            GUIListener.getInstance().setAddPauseButton((boolean) getFileHandler().load("main", getFileHandler().modDir).get("pause_button"));
-            this.getElementManager().setShowInChat((boolean) getFileHandler().load("main", getFileHandler().modDir).get("show_in_chat"));
+            GUIListener.getInstance().setAddPauseButton((boolean) getFileHandler().load("main", getFileHandler().modDir).get("pause_button"));;
         }
         final JSONObject object = new JSONObject();
         object.put("full_toggle", this.toggled);
         object.put("pause_button", GUIListener.getInstance().mustAddPauseButton());
-        object.put("show_in_chat", this.getElementManager().isShowInChat());
         getFileHandler().save("main", getFileHandler().modDir, object);
     }
 
@@ -102,7 +100,7 @@ public class Wyvtilities {
         eventBus.register(languageHandler);
 
 
-        KeyBindManager.getInstance().addKeyBind(new KeyBind("Open GUI", Keyboard.KEY_N) {
+        KeyBindManager.getInstance().addKeyBind(new KeyBind("Open GUI", Keyboard.KEY_M) {
             @Override
             public void onPressed() {
                 Minecraft.getMinecraft().displayGuiScreen(Wyvtilities.getInstance().configGui);

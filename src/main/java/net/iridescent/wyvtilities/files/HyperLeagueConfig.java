@@ -17,7 +17,7 @@ public class HyperLeagueConfig extends Vigilant {
 
 
     public HyperLeagueConfig() {
-        super(new File("./config/hyperleague.toml"));
+        super(new File("./config/wyvest/hyperleague.toml"));
         initialize();
     }
 
