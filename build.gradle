@@ -40,13 +40,15 @@ repositories {
 }
 
 dependencies {
-    compile('com.github.TGMDevelopment:TGMLib:0.5')
+    compile('com.github.TGMDevelopment:TGMLib:0.7.3')
     provided(files('libs/modcore.jar'))
+    compile('com.github.TGMDevelopment:JsonTGM:0.2.4')
 }
 
 shadowJar {
     dependencies {
-        include(dependency('com.github.TGMDevelopment:TGMLib:0.5'))
+        include(dependency('com.github.TGMDevelopment:TGMLib:0.7.3'))
+        include(dependency('com.github.TGMDevelopment:JsonTGM:0.2.4'))
     }
 
     exclude('dummyThing')

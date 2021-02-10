@@ -7,6 +7,9 @@ import ga.matthewtgm.lib.util.GuiScreenUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.Collections;
+import java.util.List;
+
 public class cmds extends CommandBase {
 
     private final String lineDivider = "------------------------------------";
@@ -14,6 +17,13 @@ public class cmds extends CommandBase {
     @Override
     public String getCommandName() {
         return "wyvtilities";
+    }
+
+
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("wyvtils");
     }
 
     @Override
@@ -33,6 +43,12 @@ public class cmds extends CommandBase {
                 Utils.getInstance().sendMessage("\n" + EnumChatFormatting.GOLD + lineDivider + "\n" + EnumChatFormatting.GREEN + "default - Opens GUI\n");
                 return;
             }
+            if(args[0].equalsIgnoreCase("reloadelements")) {
+                Wyvtilities.getInstance().getElementManager().getElements().clear();
+                Wyvtilities.getInstance().getElementManager().init();
+                return;
+            }
+
         } catch (Exception ignored) {
         }
         GuiScreenUtils.getInstance().open(Wyvtilities.getInstance().configGui);

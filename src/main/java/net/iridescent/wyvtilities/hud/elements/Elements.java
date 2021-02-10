@@ -1,10 +1,11 @@
 package net.iridescent.wyvtilities.hud.elements;
 
+import net.iridescent.wyvtilities.GUI.GUIConfiguration;
 import net.iridescent.wyvtilities.GUI.GUIElement;
-import net.iridescent.wyvtilities.others.ColourUtils;
-import net.iridescent.wyvtilities.others.References;
 import net.iridescent.wyvtilities.Wyvtilities;
 import net.iridescent.wyvtilities.files.FileHandler;
+import net.iridescent.wyvtilities.others.ColourUtils;
+import net.iridescent.wyvtilities.others.References;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -31,7 +32,7 @@ public class Elements {
 
     //INDIVIDUAL ELEMENT VARIABLES
     public String prefix;
-    public GUIElement elementScreen;
+    public GUIElement elementScreen = new GUIElement(new GUIConfiguration(Wyvtilities.getInstance().configGui), this){};
 
     //REQUIRED FOR DRAGGABLE HUD
     public int width, height;
@@ -67,6 +68,7 @@ public class Elements {
                     Integer.parseInt(String.valueOf(colourObj.get("a")))
             );
         }
+
         if(isConfigFileNull) this.chroma = true;
         else this.chroma = (boolean) handler.load(name, handler.elementDir).get("chroma");
 
@@ -94,9 +96,9 @@ public class Elements {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         if(isConfigFileNull) this.showPrefix = true;
         else this.showPrefix = (boolean) handler.load(name, handler.elementDir).get("show_prefix");
-
 
         this.setup();
     }
@@ -138,7 +140,7 @@ public class Elements {
         GlStateManager.pushMatrix();
         GlStateManager.scale(this.getPosition().getScale(), this.getPosition().getScale(), 1);
         this.mc.fontRendererObj.drawString(this.getRenderedString(), position.getX() / position.getScale(), position.getY() / position.getScale(), this.chroma ? ColourUtils.getInstance().getChroma() : this.colour.getRGB(), this.getTextShadow());
-        this.width = Math.round(this.mc.fontRendererObj.getStringWidth(this.getRenderedString()) * this.getPosition().getScale());
+        this.width = (int) (this.mc.fontRendererObj.getStringWidth(this.getRenderedString()) * this.getPosition().getScale());
         GlStateManager.popMatrix();
     }
 
@@ -231,7 +233,6 @@ public class Elements {
     public boolean isChroma() {
         return chroma;
     }
-
 
     protected void setRenderedValue(String renderedValue) {
         this.renderedValue = renderedValue;

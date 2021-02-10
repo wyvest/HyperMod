@@ -1,12 +1,20 @@
 package net.iridescent.wyvtilities.files;
 
 import club.sk1er.vigilance.Vigilant;
-import club.sk1er.vigilance.data.Property;
-import club.sk1er.vigilance.data.PropertyType;
+import club.sk1er.vigilance.data.*;
+
 import java.io.File;
 
-@SuppressWarnings("unused")
 public class HyperLeagueConfig extends Vigilant {
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "Hypixel API Key",
+            description = "Your Hypixel API key, which can be obtained from /api new. Required for some features.\nSet this with /wyvtils setkey <key>.",
+            category = "General",
+            subcategory = "API"
+    )
+    public static String apiKey = "";
 
     @Property(
             type = PropertyType.SWITCH, name = "Guild Welcome Message",

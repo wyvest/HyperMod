@@ -2,6 +2,7 @@ package net.iridescent.wyvtilities;
 
 import club.sk1er.mods.core.universal.ChatColor;
 import club.sk1er.mods.core.util.MinecraftUtils;
+import ga.matthewtgm.lib.TGMLib;
 import ga.matthewtgm.lib.util.guiscreens.GuiAppendingManager;
 import ga.matthewtgm.lib.util.keybindings.KeyBind;
 import ga.matthewtgm.lib.util.keybindings.KeyBindManager;
@@ -21,6 +22,7 @@ import net.iridescent.wyvtilities.others.LanguageHandler;
 import net.iridescent.wyvtilities.others.LocrawUtil;
 import net.iridescent.wyvtilities.others.References;
 import net.iridescent.wyvtilities.others.VersionChecker;
+import net.iridescent.wyvtilities.chat.modules.gexp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -40,6 +42,8 @@ public class Wyvtilities {
     @Mod.Instance(References.MODID)
 
     public static Wyvtilities INSTANCE;
+
+
     public static Wyvtilities getInstance() {
         return INSTANCE;
     }
@@ -51,9 +55,10 @@ public class Wyvtilities {
     private final ChatHandler chatHandler = new ChatHandler();
     private final CommandQueue commandQueue = new CommandQueue();
     private final LocrawUtil locrawUtil = new LocrawUtil();
+    private static gexp gexp = new gexp();
     private boolean toggled = true;
     private boolean latestVersion;
-    private final HyperLeagueConfig config = new HyperLeagueConfig();
+    private static HyperLeagueConfig hyperLeagueConfig = new HyperLeagueConfig();
     private static final LanguageHandler languageHandler = new LanguageHandler();
 
 
@@ -62,6 +67,7 @@ public class Wyvtilities {
 
     @Mod.EventHandler
     protected void onPreInit(FMLPreInitializationEvent event) {
+        TGMLib.getInstance().setModName(References.NAME);
 
         if (VERSION_CHECKER.getEmergencyStatus())
             throw new OutOfDateException("PLEASE UPDATE TO THE NEW VERSION OF " + References.NAME + "\nTHIS IS AN EMERGENCY!");
@@ -88,6 +94,7 @@ public class Wyvtilities {
         final ClientCommandHandler commandRegister = ClientCommandHandler.instance;
         this.configGui = new GUIMain();
         getFileHandler().init();
+        hyperLeagueConfig.preload();
 
 
 
@@ -100,13 +107,21 @@ public class Wyvtilities {
         eventBus.register(languageHandler);
 
 
+        GuiAppendingManager.getInstance().init();
+        this.configGui = new GUIMain();
+        getFileHandler().init();
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(GUIListener.getInstance());
+        MinecraftForge.EVENT_BUS.register(new PlayerListener());
         KeyBindManager.getInstance().addKeyBind(new KeyBind("Open GUI", Keyboard.KEY_M) {
             @Override
             public void onPressed() {
                 Minecraft.getMinecraft().displayGuiScreen(Wyvtilities.getInstance().configGui);
             }
         });
-        KeyBindManager.getInstance().init(References.NAME);
+        KeyBindManager.getInstance().init();
+        ClientCommandHandler.instance.registerCommand(new cmds());
+        this.getElementManager().init();
         net.iridescent.wyvtilities.modcore.ModCoreInstaller.initializeModCore(Minecraft.getMinecraft().mcDataDir);
         ClientCommandHandler.instance.registerCommand(new cmds());
         commandRegister.registerCommand(new HyperLeagueCMDs());
@@ -140,8 +155,8 @@ public class Wyvtilities {
     public void sendMessage(String message) {
         MinecraftUtils.sendMessage(ChatColor.GOLD + "[HyperLeague] ", ChatColor.translateAlternateColorCodes('&', message));
     }
-    public HyperLeagueConfig getConfig() {
-        return config;
+    public HyperLeagueConfig getHyperLeagueConfig() {
+        return hyperLeagueConfig;
     }
 
     public LanguageHandler getLanguageHandler() {
@@ -151,8 +166,8 @@ public class Wyvtilities {
     public CommandQueue getCommandQueue() {
         return commandQueue;
     }
-    public LocrawUtil getLocrawUtil() {
-        return locrawUtil;
-    }
+    public LocrawUtil getLocrawUtil() { return locrawUtil;}
+    public static gexp getGexp() {return gexp;}
+    public static HyperLeagueConfig hyperLeagueConfig() {return hyperLeagueConfig;}
 
 }
