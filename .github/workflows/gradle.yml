@@ -22,14 +22,5 @@ jobs:
         java-version: 1.8
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
-    - name: Setup decompiled workspace
-      run: ./gradlew setupDecompWorkspace
     - name: Build mod
       run: ./gradlew build
-    - name: Upload the build artifact
-      uses: ./actions/upload-artifact@v2
-      with:
-        name: HyperMod-working
-        path: build/libs/HyperMod-0.1.0-working.jar
