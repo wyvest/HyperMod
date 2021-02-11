@@ -14,9 +14,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = "0.0.3"
-group = "net.iridescent.wyvtilities"
-archivesBaseName = "Wyvtilities"
+version = "0.1.0"
+group = "fun.iridescent.hypermod"
+archivesBaseName = "HyperMod"
 
 sourceCompatibility = targetCompatibility = 1.8
 

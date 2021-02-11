@@ -1,4 +1,4 @@
 # HyperMod
-epic minecraft 1.8.9 forge mod
+A utility mod for the HyperLeague guild.
 
 bit.ly/wyvest
