@@ -1,4 +1,4 @@
 # HyperMod
 A utility mod for the HyperLeague guild.
 
-bit.ly/wyvest
+HyperLeague 2021. Be ready.
